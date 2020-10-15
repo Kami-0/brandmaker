@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Daniil.Makarov">
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year_of_birth" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="users">
+            <column name="name">Victor</column>
+            <column name="surname">Kozlov</column>
+            <column name="email">VicKoz@mail.ru</column>
+            <column name="year_of_birth">1982</column>
+        </insert>
+
+        <insert tableName="users">
+            <column name="name">Daniil</column>
+            <column name="surname">Makarov</column>
+            <column name="email">DanMak@mail.ru</column>
+            <column name="year_of_birth">2000</column>
+        </insert>
+
+        <insert tableName="users">
+            <column name="name">Alexey</column>
+            <column name="surname">Bolshedvorsky</column>
+            <column name="email">AlexBol@mail.ru</column>
+            <column name="year_of_birth">1999</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

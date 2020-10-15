@@ -1,0 +1,13 @@
+**/*.iml
+**/.idea
+
+*.class
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#Gradle temporary files
+target/
