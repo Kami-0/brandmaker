@@ -6,6 +6,7 @@
 
 Деплой:
 1.Запустить WildFly 10.1 на дефолтом порту
+
 2.В директории проекта выполнить команду `mvn clean package wildfly:deploy`
 
 ![alt text](https://sun9-38.userapi.com/impf/Xiqxn_yM0GpfawEJGqvpfqIkgvK5FH0Cw4OFyg/x1GnYmOv2iQ.jpg?size=680x77&quality=90&proxy=1&sign=dc96798132b4e7fe89941d263439e008)
