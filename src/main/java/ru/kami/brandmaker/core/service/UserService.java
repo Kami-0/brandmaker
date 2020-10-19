@@ -25,18 +25,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDto createUser(UserDto userDto) {
-        final UserEntity userEntity = userRepository
-                .save(EntityToDtoConverter.convert(userDto));
-        return DtoToEntityConverter.convert(userEntity);
-    }
-
     public List<UserDto> getAllUsers() {
         return userRepository
                 .findAll()
                 .stream()
                 .map(DtoToEntityConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public UserDto createUser(UserDto userDto) {
+        final UserEntity userEntity = userRepository
+                .save(EntityToDtoConverter.convert(userDto));
+        return DtoToEntityConverter.convert(userEntity);
     }
 
     public void deleteUser(long id) {

@@ -13,9 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.kami.brandmaker.core.api.common.exceptions.EntityNotFoundException;
-import ru.kami.brandmaker.core.api.common.exceptions.InvalidTicketRequestException;
-import ru.kami.brandmaker.core.api.common.types.EntityType;
+import ru.kami.brandmaker.core.api.exceptions.EntityNotFoundException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -26,12 +24,22 @@ import javax.validation.ConstraintViolationException;
 public class WebExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
+     * При не валидном id
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(
+                new ExceptionResponse("Некорректный запрос", ex.getMessage()),
+                HttpStatus.NOT_FOUND);
+    }
+
+    /**
      * При некорректном запросе
      */
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return new ResponseEntity<>(
-                new ExceptionResponse(HttpStatus.NOT_FOUND.value(), "Некорректный запрос", ex.getMessage()),
+                new ExceptionResponse("Некорректный запрос", ex.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
 
@@ -41,32 +49,8 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return new ResponseEntity<>(
-                new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), "Некорректный JSON запрос", ex.getMessage()),
+                new ExceptionResponse("Некорректный JSON запрос", ex.getMessage()),
                 HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * При невалидном id
-     */
-    @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<ExceptionResponseEntity> handleEntityNotFoundException(EntityNotFoundException ex) {
-        return new ResponseEntity<>(
-                new ExceptionResponseEntity(HttpStatus.NOT_FOUND.value(),
-                        ex.getEntityType(),
-                        ex.getMessage()),
-                HttpStatus.NOT_FOUND);
-    }
-
-    /**
-     * При невалидной попытке забронировать место
-     */
-    @ExceptionHandler(InvalidTicketRequestException.class)
-    protected ResponseEntity<ExceptionResponse> handleNotFoundException(EntityNotFoundException ex) {
-        return new ResponseEntity<>(
-                new ExceptionResponse(HttpStatus.BAD_REQUEST.value(),
-                        ex.getMessage(),
-                        ex.getMessage()),
-                HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -75,7 +59,7 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ExceptionResponse> handlePathVariableException(ConstraintViolationException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), ex.getMessage()),
+                new ExceptionResponse(ex.getMessage(), ex.getMessage()),
                 HttpStatus.BAD_REQUEST);
     }
 
@@ -85,24 +69,14 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ExceptionResponse> handleIncorrectPath(MethodArgumentTypeMismatchException ex) {
         return new ResponseEntity<>(
-                new ExceptionResponse(HttpStatus.NOT_FOUND.value(), "Некорректный " + ex.getParameter().getParameterName(), ex.getMessage()),
+                new ExceptionResponse("Некорректный " + ex.getParameter().getParameterName(), ex.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
 
     @Data
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private static class ExceptionResponseEntity {
-        private int status;
-        private EntityType entityType;
-        private String message;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class ExceptionResponse {
-        private int status;
         private String message;
         private String debugMessage;
     }

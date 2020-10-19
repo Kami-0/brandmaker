@@ -1,4 +1,4 @@
-package ru.kami.brandmaker.core.web.rest;
+package ru.kami.brandmaker.core.controller;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,28 +14,27 @@ import java.util.List;
  */
 @RestController
 @Validated
-@RequestMapping(value = "/users")
+@RequestMapping("user")
 public class UserController implements UserApi {
 
     @EJB
     private UserService userService;
 
     @Override
-    @GetMapping(value = "")
+    @GetMapping
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @Override
-    @PutMapping(value = "/{id}/create")
+    @PostMapping
     public UserDto createUser(@RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
 
     @Override
-    @DeleteMapping(value = "/{id}/delete")
+    @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
     }
-
 }
