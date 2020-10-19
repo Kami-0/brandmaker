@@ -5,6 +5,7 @@
 Стек: Java8, JavaScript H2, Vue.js, WildFly 10.1, Hibernate, EJB3, SpringBoot, liquebase
 
 Деплой:
+
 1.Запустить WildFly 10.1 на дефолтом порту
 
 2.В директории проекта выполнить команду `mvn clean package wildfly:deploy`
